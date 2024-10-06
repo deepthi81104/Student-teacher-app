@@ -136,17 +136,17 @@
             <div class="card bg-warning">
                 <div class="card-title">ATTENDANCE</div>
                 <img src="images/attendance.png" class="card-icon">
-                <div class="card-text">Your Attendance Percentage <br> is 100%</div>
+                <div class="card-text">Maintain student attendance <br> records</div>
             </div>
             <div class="card bg-success">
                 <div class="card-title text-light">CLASSES</div>
                 <img src="images/bell.png" class="card-icon">
-                <div class="card-text text-light">You are enrolled <br> in 3 classes</div>
+                <div class="card-text text-light">You are teaching<br> in 3 classes</div>
             </div>
             <div class="card bg-danger">
                 <div class="card-title text-light">ASSIGNMENT</div>
                 <img src="images/assignment.png" class="card-icon">
-                <div class="card-text text-light">You have <br>1 assignment</div>
+                <div class="card-text text-light">You have given <br>1 assignment</div>
             </div>
         </div>
 
@@ -162,7 +162,7 @@
             </div>
         </div>
         <div class="task-section bg-light">
-            <div class="announcement-title">TASK</div>
+            <div class="announcement-title">TASKS</div>
             <div class="announcement-content">
                 <ul>
                     <li></li>
