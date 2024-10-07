@@ -117,13 +117,13 @@
 <body>
     <div class="header bg-info">
         <h1>Welcome <span class="text-light"><?php echo $_SESSION['admin_name'] ?></span></h1>
-        <h2 class="text-dark">You are a Teacher</h2>
+        <h2 class="text-dark">You are a Admin</h2>
     </div>
     <div class="sidebar">
         <ul>
             <li><a href="#">Home</a></li>
             <li><a href="admin_add_class.php">Add classes</a></li>
-            <li><a href="#">Add students</a></li>
+            <li><a href="admin_add_students.php">Add students</a></li>
             <li><a href="#">View and Manage Classes</a></li>
             <li><a href="#">View and Manage Students</a></li>
         </ul>
