@@ -21,7 +21,9 @@ if(isset($_POST['submit'])){
         }
         else{
             $_SESSION['teacher_name']=$row['name'];
+            $_SESSION['teacher_id']=$row['id'];
             header(header: "location:teacher.php");
+
         }
     }
     else{

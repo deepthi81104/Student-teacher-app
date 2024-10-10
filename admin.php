@@ -125,7 +125,6 @@
             <li><a href="admin_add_class.php">Add classes</a></li>
             <li><a href="admin_add_students.php">Add students</a></li>
             <li><a href="#">View and Manage Classes</a></li>
-            <li><a href="#">View and Manage Students</a></li>
         </ul>
     </div>
     <div class="content">
