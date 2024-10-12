@@ -124,7 +124,7 @@
     <div class="sidebar">
         <ul>
             <li><a href="#">Home</a></li>
-            <li><a href="#">Attendance</a></li>
+            <li><a href="student_view_attendance.php">Attendance</a></li>
             <li><a href="#">Assignment</a></li>
             <li><a href="#">Grade</a></li>
         </ul>

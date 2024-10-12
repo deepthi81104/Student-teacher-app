@@ -5,7 +5,6 @@ if(isset($_POST['submit'])){
     $name=$_POST['name'];
     $email=$_POST['email'];
     $pass=md5($_POST['password']);
-    $cpass=md5($_POST['cpassword']);
     $sql="SELECT * FROM user_form WHERE email='$email' AND password='$pass'";
     $result=mysqli_query($conn,$sql);
     if(mysqli_num_rows($result)>0){
@@ -17,6 +16,7 @@ if(isset($_POST['submit'])){
         }
         else if($row['user_type']=='student'){
             $_SESSION['student_name']=$row['name'];
+            $_SESSION['student_id']=$row['id'];
             header("location:student.php");
         }
         else{
