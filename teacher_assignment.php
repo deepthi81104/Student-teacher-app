@@ -14,13 +14,14 @@ $result=mysqli_query($conn,$query);
 </head>
 <body>
    <h2>POST ASSIGNMENT</h2> 
-    <form action="teacher_assignment.php" method="post">
+    <form action="teacher_assignment.php" method="post"  enctype="multipart/form-data">
     <label>Class</label>
     <select name="class_id">
         <option value="">Select a class</option>
         <?php
          while($row=mysqli_fetch_assoc($result)){
             echo "<option value='".$row['class_id']."'>".$row['class_name']."</option>";
+            echo "<input type='hidden' name='class_name' value='".$row['class_name']."' >";
          }
         ?>
     </select><br>
@@ -41,16 +42,16 @@ $result=mysqli_query($conn,$query);
 if(isset($_POST['submit_assignment'])){
     $name=$_POST['assignment_name'];
     $description=$_POST['description'];
-   $class_id=$_POST['class_id'];
+   $class_name=$_POST['class_name'];
    $file_name=$_FILES['assignment_file']['name'];
    $file_temp=$_FILES['assignment_file']['tmp_name'];
-   $upload_dir="assignments/class_$class_id/";
+   $upload_dir="assignments/class_$class_name/";
    if(!is_dir($upload_dir)){
     mkdir($upload_dir,0777,true);
    }
    $destination=$upload_dir.$file_name;
-   if(move_uploaded_file($file_temp,$destinaton)){
-    echo "Assignment '$assignment_name' uploaded successfully";
+   if(move_uploaded_file($file_temp,$destination)){
+    echo "Assignment '$name' uploaded successfully";
    }
     else{
         echo "failed to upload";
