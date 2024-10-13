@@ -121,10 +121,10 @@
     </div>
     <div class="sidebar">
         <ul>
-            <li><a href="#">Home</a></li>
+            <li><a href="admin.php">Home</a></li>
             <li><a href="admin_add_class.php">Add classes</a></li>
             <li><a href="admin_add_students.php">Add students</a></li>
-            <li><a href="#">View and Manage Classes</a></li>
+            <li><a href="admin_management.php">View and Manage Classes</a></li>
         </ul>
     </div>
     <div class="content">
