@@ -123,7 +123,7 @@
     <!-- Sidebar Section -->
     <div class="sidebar">
         <ul>
-            <li><a href="#">Home</a></li>
+            <li><a href="teacher.php">Home</a></li>
             <li><a href="teacher_attendance_class.php">Mark Attendance</a></li>
             <li><a href="teacher_assignment.php">Assignment</a></li>
             <li><a href="#">Grade</a></li>
