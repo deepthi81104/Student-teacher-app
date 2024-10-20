@@ -35,6 +35,7 @@
     </form>
     <?php
        if(isset($_POST['enroll_students'])){
+        if (isset($_POST['student_ids']) && is_array($_POST['student_ids'])) {
         $student_ids=$_POST['student_ids'];
         $class_id=$_POST['class_id'];
         foreach($student_ids as $student_id){
@@ -42,11 +43,11 @@
           if(mysqli_query($conn,$query)){
             echo "Students enrolled successfully";
           }
-          else{
+       else{
              echo "error inserting";
           }
         }
-        
+      }
        }
     ?>
 </body>

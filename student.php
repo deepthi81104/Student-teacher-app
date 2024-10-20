@@ -126,7 +126,7 @@
             <li><a href="student.php">Home</a></li>
             <li><a href="student_view_attendance.php">Attendance</a></li>
             <li><a href="student_assignment.php">Assignment</a></li>
-            <li><a href="#">Grade</a></li>
+            <li><a href="view_grades.php">Grade</a></li>
         </ul>
     </div>
 
