@@ -2,8 +2,14 @@
 session_start();
 include 'config.php'; // DB connection
 
-// Assuming student_id is stored in session after login
+// Check if student_id exists in the session
+if (!isset($_SESSION['student_id'])) {
+    echo "Student ID not found in session.";
+    exit;
+}
+
 $student_id = $_SESSION['student_id'];
+echo "Logged in as Student ID: $student_id<br>";
 
 // Fetch the grades for the student
 $query = "
@@ -14,19 +20,23 @@ $query = "
 ";
 $result = mysqli_query($conn, $query);
 
-// Prepare an array to hold the grades grouped by class
-$grades = [];
+// Check if the query returns results
+if (mysqli_num_rows($result) === 0) {
+    echo "No grades found for student ID: $student_id.";
+} else {
+    // Prepare an array to hold the grades grouped by class
+    $grades = [];
+    while ($row = mysqli_fetch_assoc($result)) {
+        $class_name = $row['class_name'];
+        $cat_type = $row['cat_type'];
+        $grade = $row['grade'];
 
-while ($row = mysqli_fetch_assoc($result)) {
-    $class_name = $row['class_name'];
-    $cat_type = $row['cat_type'];
-    $grade = $row['grade'];
-
-    // Group by class and CAT
-    if (!isset($grades[$class_name])) {
-        $grades[$class_name] = [];
+        // Group by class and CAT
+        if (!isset($grades[$class_name])) {
+            $grades[$class_name] = [];
+        }
+        $grades[$class_name][$cat_type] = $grade;
     }
-    $grades[$class_name][$cat_type] = $grade;
 }
 ?>
 
@@ -88,4 +98,4 @@ while ($row = mysqli_fetch_assoc($result)) {
         <?php endforeach; ?>
     <?php endif; ?>
 </body>
-</html> 
+</html>
