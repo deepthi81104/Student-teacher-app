@@ -125,7 +125,8 @@
         <ul>
             <li><a href="teacher.php">Home</a></li>
             <li><a href="teacher_attendance_class.php">Mark Attendance</a></li>
-            <li><a href="teacher_assignment.php">Assignment</a></li>
+            <li><a href="teacher_assignment.php">Post Assignment</a></li>
+            <li><a href="teacher_submissions.php">View Submissions</a></li>
             <li><a href="#">Grade</a></li>
         </ul>
     </div>
