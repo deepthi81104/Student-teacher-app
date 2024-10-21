@@ -1,15 +1,11 @@
 <?php
 session_start();
-include 'config.php'; // DB connection
-
-// Check if class_id is provided
+include 'config.php'; 
 $class_id = isset($_GET['class_id']) ? $_GET['class_id'] : null;
 if ($class_id === null) {
     echo "Class ID not provided.";
     exit;
 }
-
-// Fetch students enrolled in the class
 $query = "
     SELECT u.id, u.name 
     FROM student_classes sc
@@ -17,6 +13,27 @@ $query = "
     WHERE sc.class_id = '$class_id'
 ";
 $result = mysqli_query($conn, $query);
+
+$grades_data = [
+    'CAT1' => [],
+    'CAT2' => [],
+    'CAT3' => []
+];
+
+// Fetch existing grades for each CAT type
+foreach (['CAT1', 'CAT2', 'CAT3'] as $cat_type) {
+    $grade_query = "
+        SELECT sg.student_id, sg.grade, u.name 
+        FROM student_grades sg
+        JOIN user_form u ON sg.student_id = u.id
+        WHERE sg.class_id = '$class_id' AND sg.cat_type = '$cat_type'
+    ";
+    $grade_result = mysqli_query($conn, $grade_query);
+
+    while ($row = mysqli_fetch_assoc($grade_result)) {
+        $grades_data[$cat_type][] = $row;
+    }
+}
 
 ?>
 
@@ -26,56 +43,189 @@ $result = mysqli_query($conn, $query);
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Input Grades</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body {
+            background-color: #f8f9fa;
+        }
+        h2 {
+            text-align: center;
+            margin: 20px 0;
+        }
+        .table-container {
+            margin: 20px auto;
+            width: 80%;
+        }
+        .table-container h3 {
+            color: teal;
+            font-weight: bold;
+            text-align: center;
+        }
+        .edit-link {
+            color: blue;
+            text-decoration: underline;
+            cursor: pointer;
+        }
+    </style>
 </head>
 <body>
-    <h2>Input Grades for Class</h2>
-    
-    <form action="save_grades.php" method="POST">
-        <input type="hidden" name="class_id" value="<?php echo htmlspecialchars($class_id, ENT_QUOTES, 'UTF-8'); ?>">
 
-        <label>Select CAT:</label>
-        <select name="cat_type" required>
-            <option value="CAT1">CAT1</option>
-            <option value="CAT2">CAT2</option>
-            <option value="CAT3">CAT3</option>
-        </select>
-        <br>
+<div class="container">
+    <h2 class="text-success">Input Grades for Class ID: <?php echo htmlspecialchars($class_id, ENT_QUOTES, 'UTF-8'); ?></h2>
 
-        <table border="1">
-            <tr>
-                <th>Student Name</th>
-                <th>Grade</th>
-            </tr>
-            <?php while ($row = mysqli_fetch_assoc($result)): ?>
-                <?php
-                // Check if the student already has a grade for the selected CAT
-                $student_id = $row['id'];
-                $cat_query = "
-                    SELECT grade 
-                    FROM student_grades 
-                    WHERE student_id = '$student_id' AND class_id = '$class_id' AND cat_type = 'CAT1'"; // example, can be dynamic
-                $cat_result = mysqli_query($conn, $cat_query);
-                $existing_grade = mysqli_fetch_assoc($cat_result);
-
-                // Prevent the warning by checking if $existing_grade is not null
-                $grade_value = isset($existing_grade['grade']) ? $existing_grade['grade'] : null;
-                ?>
+    <div class="table-container">
+        <h3>CAT1 Grades</h3>
+        <form action="save_grades.php" method="POST">
+            <input type="hidden" name="class_id" value="<?php echo htmlspecialchars($class_id, ENT_QUOTES, 'UTF-8'); ?>">
+            <input type="hidden" name="cat_type" value="CAT1">
+            <table class="table table-bordered table-hover">
+                <thead>
                 <tr>
-                    <td><?php echo htmlspecialchars($row['name'], ENT_QUOTES, 'UTF-8'); ?></td>
-                    <td>
-                        <input type="hidden" name="student_ids[]" value="<?php echo htmlspecialchars($student_id, ENT_QUOTES, 'UTF-8'); ?>">
-                        <input type="number" name="grades[]" placeholder="Enter grade" 
-                               value="<?php echo htmlspecialchars($grade_value, ENT_QUOTES, 'UTF-8'); ?>" 
-                               <?php echo ($grade_value !== null) ? 'readonly' : ''; ?>>
-                        <?php if ($grade_value !== null): ?>
-                            <span style="color: red;">Already exists (<?php echo $grade_value; ?>). Edit disabled.</span>
-                        <?php endif; ?>
-                    </td>
+                    <th>Student Name</th>
+                    <th>Grade</th>
+                    <th>Action</th>
                 </tr>
-            <?php endwhile; ?>
-        </table>
-        
-        <input type="submit" value="Submit Grades">
-    </form>
+                </thead>
+                <tbody>
+                <?php foreach ($grades_data['CAT1'] as $grade): ?>
+                    <tr>
+                        <td><?php echo htmlspecialchars($grade['name'], ENT_QUOTES, 'UTF-8'); ?></td>
+                        <td><?php echo htmlspecialchars($grade['grade'], ENT_QUOTES, 'UTF-8'); ?></td>
+                        <td><a class="edit-link" href="edit_grades.php?student_id=<?php echo $grade['student_id']; ?>&class_id=<?php echo $class_id; ?>&cat_type=CAT1">Edit</a></td>
+                    </tr>
+                <?php endforeach; ?>
+                <?php
+                // Reset the result pointer to fetch students again
+                mysqli_data_seek($result, 0);
+                while ($row = mysqli_fetch_assoc($result)) {
+                    $student_id = $row['id'];
+                    $has_grade = false;
+                    foreach ($grades_data['CAT1'] as $grade) {
+                        if ($grade['student_id'] == $student_id) {
+                            $has_grade = true;
+                            break;
+                        }
+                    }
+                    // Only display input for students without grades
+                    if (!$has_grade) {
+                        echo '<tr>
+                            <td>' . htmlspecialchars($row['name'], ENT_QUOTES, 'UTF-8') . '</td>
+                            <td>
+                                <input type="hidden" name="student_ids[]" value="' . htmlspecialchars($student_id, ENT_QUOTES, 'UTF-8') . '">
+                                <input type="number" name="grades[]" placeholder="Enter grade" required>
+                            </td>
+                            <td><button type="submit" class="btn btn-success">Add Grade</button></td>
+                        </tr>';
+                    }
+                }
+                ?>
+                </tbody>
+            </table>
+        </form>
+    </div>
+
+    <div class="table-container">
+        <h3>CAT2 Grades</h3>
+        <form action="save_grades.php" method="POST">
+            <input type="hidden" name="class_id" value="<?php echo htmlspecialchars($class_id, ENT_QUOTES, 'UTF-8'); ?>">
+            <input type="hidden" name="cat_type" value="CAT2">
+            <table class="table table-bordered table-hover">
+                <thead>
+                <tr>
+                    <th>Student Name</th>
+                    <th>Grade</th>
+                    <th>Action</th>
+                </tr>
+                </thead>
+                <tbody>
+                <?php foreach ($grades_data['CAT2'] as $grade): ?>
+                    <tr>
+                        <td><?php echo htmlspecialchars($grade['name'], ENT_QUOTES, 'UTF-8'); ?></td>
+                        <td><?php echo htmlspecialchars($grade['grade'], ENT_QUOTES, 'UTF-8'); ?></td>
+                        <td><a class="edit-link" href="edit_grades.php?student_id=<?php echo $grade['student_id']; ?>&class_id=<?php echo $class_id; ?>&cat_type=CAT2">Edit</a></td>
+                    </tr>
+                <?php endforeach; ?>
+
+                <!-- Add grades for students without existing grades -->
+                <?php
+                mysqli_data_seek($result, 0);
+                while ($row = mysqli_fetch_assoc($result)) {
+                    $student_id = $row['id'];
+                    $has_grade = false;
+                    foreach ($grades_data['CAT2'] as $grade) {
+                        if ($grade['student_id'] == $student_id) {
+                            $has_grade = true;
+                            break;
+                        }
+                    }
+                    if (!$has_grade) {
+                        echo '<tr>
+                            <td>' . htmlspecialchars($row['name'], ENT_QUOTES, 'UTF-8') . '</td>
+                            <td>
+                                <input type="hidden" name="student_ids[]" value="' . htmlspecialchars($student_id, ENT_QUOTES, 'UTF-8') . '">
+                                <input type="number" name="grades[]" placeholder="Enter grade" required>
+                            </td>
+                            <td><button type="submit" class="btn btn-success">Add Grade</button></td>
+                        </tr>';
+                    }
+                }
+                ?>
+                </tbody>
+            </table>
+        </form>
+    </div>
+
+    <div class="table-container">
+        <h3>CAT3 Grades</h3>
+        <form action="save_grades.php" method="POST">
+            <input type="hidden" name="class_id" value="<?php echo htmlspecialchars($class_id, ENT_QUOTES, 'UTF-8'); ?>">
+            <input type="hidden" name="cat_type" value="CAT3">
+            <table class="table table-bordered table-hover">
+                <thead>
+                <tr>
+                    <th>Student Name</th>
+                    <th>Grade</th>
+                    <th>Action</th>
+                </tr>
+                </thead>
+                <tbody>
+                <?php foreach ($grades_data['CAT3'] as $grade): ?>
+                    <tr>
+                        <td><?php echo htmlspecialchars($grade['name'], ENT_QUOTES, 'UTF-8'); ?></td>
+                        <td><?php echo htmlspecialchars($grade['grade'], ENT_QUOTES, 'UTF-8'); ?></td>
+                        <td><a class="edit-link" href="edit_grades.php?student_id=<?php echo $grade['student_id']; ?>&class_id=<?php echo $class_id; ?>&cat_type=CAT3">Edit</a></td>
+                    </tr>
+                <?php endforeach; ?>
+
+                <!-- Add grades for students without existing grades -->
+                <?php
+                mysqli_data_seek($result, 0);
+                while ($row = mysqli_fetch_assoc($result)) {
+                    $student_id = $row['id'];
+                    $has_grade = false;
+                    foreach ($grades_data['CAT3'] as $grade) {
+                        if ($grade['student_id'] == $student_id) {
+                            $has_grade = true;
+                            break;
+                        }
+                    }
+                    if (!$has_grade) {
+                        echo '<tr>
+                            <td>' . htmlspecialchars($row['name'], ENT_QUOTES, 'UTF-8') . '</td>
+                            <td>
+                                <input type="hidden" name="student_ids[]" value="' . htmlspecialchars($student_id, ENT_QUOTES, 'UTF-8') . '">
+                                <input type="number" name="grades[]" placeholder="Enter grade" required>
+                            </td>
+                            <td><button type="submit" class="btn btn-success">Add Grade</button></td>
+                        </tr>';
+                    }
+                }
+                ?>
+                </tbody>
+            </table>
+        </form>
+    </div>
+</div>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>
