@@ -71,7 +71,8 @@ if(!is_dir($upload_dir)){
 }
 $file_name=$_FILES['submit_file']['name'];
 $file_path=$_FILES['submit_file']['tmp_name'];
-$destination=$upload_dir.$file_name;
+$new_file_name = "stud_id_".$student_id."_".$file_name; 
+$destination=$upload_dir.$new_file_name;
 if(move_uploaded_file($file_path,$destination)){
     echo "<p>Assignments submitted successfully!</p>";
 }
