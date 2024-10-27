@@ -143,7 +143,6 @@
             color: #555;
         }
 
-        /* Responsive Cards */
         @media (max-width: 768px) {
             .card-container {
                 flex-direction: column;
@@ -156,13 +155,11 @@
     </style>
 </head>
 <body>
-    <!-- Header Section -->
     <div class="header bg-info">
         <h1>Welcome <span class="text-light"><?php echo $_SESSION['teacher_name'] ?></span></h1>
         <h2 class="text-light">You are a Teacher</h2>
     </div>
 
-    <!-- Sidebar Section -->
     <div class="sidebar">
         <ul>
             <li><a href="teacher.php">Home</a></li>
@@ -173,7 +170,6 @@
         </ul>
     </div>
 
-    <!-- Main Content -->
     <div class="content">
         <div class="card-container">
             <div class="card bg-warning">
