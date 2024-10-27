@@ -55,7 +55,7 @@ $student_id = $_SESSION['student_id'];
             <div class="col-md-6">
                 <div class="card">
                     <h2><strong>Your Grades</strong> </h2>
-                    <!-- Create a form that submits the student ID using POST method -->
+
                     <form action="student_grades.php" method="POST">
                         <input type="hidden" name="student_id" value="<?php echo $student_id; ?>">
                         <div class="d-grid gap-2">
