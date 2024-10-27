@@ -180,12 +180,12 @@
             <div class="card bg-success">
                 <div class="card-title text-light">Classes</div>
                 <img src="images/bell.png" class="card-icon" alt="Classes Icon">
-                <div class="card-text text-light">You are teaching<br> in 3 classes</div>
+                <div class="card-text text-light">You are enrolled<br> in 2 classes</div>
             </div>
             <div class="card bg-danger">
                 <div class="card-title text-light">Assignment</div>
                 <img src="images/assignment.png" class="card-icon" alt="Assignment Icon">
-                <div class="card-text text-light">You have given <br>1 assignment</div>
+                <div class="card-text text-light">You have been given <br>1 assignment</div>
             </div>
         </div>
 
