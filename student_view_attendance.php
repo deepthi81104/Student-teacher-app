@@ -12,9 +12,7 @@ $current_class = null;
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>View Attendance</title>
-    <!-- Bootstrap CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
-    <!-- Custom CSS -->
     <style>
         body {
             background-color: #f8f9fa;
@@ -62,12 +60,10 @@ $current_class = null;
         if (mysqli_num_rows($attendance) > 0) {
             while ($row = mysqli_fetch_assoc($attendance)) {
                 if ($row['class_name'] !== $current_class) {
-                    // Close previous table if there was one
                     if ($current_class !== null) {
                         echo "</table>";
                     }
                     
-                    // Set the new current class and start a new table
                     $current_class = $row['class_name'];
                     echo "<h3 class='text-dark text-center'>Class: " . $current_class . "</h3>";
                     echo "<table class='table table-bordered'>

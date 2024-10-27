@@ -4,6 +4,7 @@ session_start();
 $teacher_id=$_SESSION['teacher_id'];
 $query="SELECT class_id, class_name FROM classes WHERE teacher_id='$teacher_id'";
 $result=mysqli_query($conn,$query);
+
 ?>
 <!DOCTYPE html>
 <html lang="en">

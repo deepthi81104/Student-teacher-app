@@ -114,7 +114,6 @@
             font-size: 14px;
         }
 
-        /* Announcement and Task Section */
         .announcement-section, .task-section {
             border: 1px solid #ddd;
             border-radius: 8px;
@@ -142,7 +141,6 @@
             color: #555;
         }
 
-        /* Responsive Cards */
         @media (max-width: 768px) {
             .card-container {
                 flex-direction: column;
@@ -172,7 +170,6 @@
         </ul>
     </div>
 
-    <!-- Main Content -->
     <div class="content">
         <div class="card-container">
             <div class="card bg-warning">
@@ -192,7 +189,7 @@
             </div>
         </div>
 
-        <!-- Announcement Section -->
+       
         <div class="announcement-section">
             <div class="announcement-title">Announcements</div>
             <div class="announcement-content">

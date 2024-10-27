@@ -52,7 +52,7 @@ $classes=mysqli_query($conn, $query);
         .upload-btn:hover {
             margin-top: 20px;
             background-color:teal;
-        }
+            
 
         .alert {
             margin-top: 20px;

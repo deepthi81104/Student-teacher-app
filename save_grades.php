@@ -1,8 +1,7 @@
 <?php
 session_start();
-include 'config.php'; // DB connection
+include 'config.php';
 
-// Check if the necessary POST data is set
 if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['class_id'], $_POST['cat_type'])) {
     $class_id = $_POST['class_id'];
     $cat_type = $_POST['cat_type'];
@@ -11,7 +10,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['class_id'], $_POST['ca
 
     foreach ($student_ids as $index => $student_id) {
         $grade = $grades[$index];
-        // Check if the grade already exists
         $check_query = "
             SELECT * FROM student_grades 
             WHERE class_id = '$class_id' AND student_id = '$student_id' AND cat_type = '$cat_type'
@@ -36,7 +34,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['class_id'], $_POST['ca
         }
     }
 
-    // Redirect back to the input grades page with success message
     header("Location: input_grade_teacher.php?class_id=$class_id");
     exit();
 } else {
